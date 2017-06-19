@@ -20,6 +20,7 @@ import it.uniroma3.spring.model.Autore;
 import it.uniroma3.spring.model.Quadro;
 import it.uniroma3.spring.service.AutoreService;
 import it.uniroma3.spring.service.QuadroService;
+import it.uniroma3.spring.validator.quadroValidator;
 
 
 @Controller
@@ -89,9 +90,15 @@ public class QuadroController  {
 		else {
 			model.addAttribute(quadro);
 			quadro.setAutore(autoreservice.findbyId(id));
-			quadroservice.add(quadro); 
-		}
-		return "resultQuadro";
+			if(quadroValidator.validate(quadro,model)){
+				quadroservice.add(quadro);
+				return "resultQuadro";
+			}
+			else{
+				model.addAttribute("autori",autoreservice.findAll());
+				return "Quadroform";}
+			
+	}
 	}
 
 
